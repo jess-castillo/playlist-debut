@@ -33,17 +33,16 @@ def insert_focus_song(mixed_list, focus_song_id, playlist_len):
             playlist_len += 1
             break
 
-
-# https://open.spotify.com/playlist/22cdzwGdEg4lfZtNKfc9MU?si=45ea75ad71c3443c
-playlist_id = 'spotify:playlist:22cdzwGdEg4lfZtNKfc9MU'
+# https://open.spotify.com/playlist/05qYM9xgYexlPa9y4o6mEk?si=1d65df5e828548e6
+playlist_id = 'spotify:playlist:05qYM9xgYexlPa9y4o6mEk'
 tracks = sp.playlist(playlist_id)
 playlist_len = len(tracks["tracks"]["items"])
 print(f"The lenght of the playlist is: {playlist_len}")
 
-# https://open.spotify.com/track/1lHB30OmHigE89xBgGekwE?si=4f5f11e7e7674958
-focus_song_id = "1lHB30OmHigE89xBgGekwE"
+# https://open.spotify.com/track/6afspjTp6s1QucDHVKPDss?si=ef1466f1077e4171
+focus_song_id = "6afspjTp6s1QucDHVKPDss"
 
-mixed_list = 18*[1]
+mixed_list = 18*[3]
 
 print("Adding focus song......")
 insert_focus_song(mixed_list, focus_song_id, playlist_len)

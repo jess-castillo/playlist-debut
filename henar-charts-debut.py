@@ -22,7 +22,7 @@ def generate_mixed_list_with_sum_limit(sum_limit):
         
         # Fill the rest with random choices of 2, 4, or 5
         remaining_numbers = 19 - num_threes
-        result_list.extend(random.choices([2, 4], k=remaining_numbers))
+        result_list.extend(random.choices([2, 4, 5], k=remaining_numbers))
         
         # Shuffle the list to mix the numbers up
         random.shuffle(result_list)
@@ -34,9 +34,9 @@ def generate_mixed_list_with_sum_limit(sum_limit):
 
 def insert_focus_song(mixed_list, focus_song_id, playlist_len):
     # Start by inserting the item at the first position
-    sp.playlist_add_items(playlist_id, [f"spotify:track:{focus_song_id}"], position=0)
+    sp.playlist_add_items(playlist_id, [f"spotify:track:{focus_song_id}"], position=1)
     playlist_len += 1
-    current_position = 1  # We start with an offset of 1 because we added an item at the start
+    current_position = 2  # We start with an offset of 1 because we added an item at the start
 
     # Insert items based on the mixed_list
     for value in mixed_list:
@@ -50,20 +50,28 @@ def insert_focus_song(mixed_list, focus_song_id, playlist_len):
             playlist_len += 1
             break
 
-# https://open.spotify.com/playlist/1LaFd5xbkkbRXrm7inRTq4?si=4189df3ea13f4a6e&pt=deaaa9830404dde380e432b8d693479e
-# playlists = ['5U934d48njPvMoejeF4Lm0', '1LaFd5xbkkbRXrm7inRTq4']
-playlists = ['1LaFd5xbkkbRXrm7inRTq4']
-# 6afspjTp6s1QucDHVKPDss
+# https://open.spotify.com/playlist/4d7GbnFAyuFCLL2W0HfGCl?si=14825b38344a4bd0
+playlists = ['6gjb1aB2k7g5TV7mAH3fA9', 
+             '4d7GbnFAyuFCLL2W0HfGCl', 
+             '3E54VymV7wiE0TTIvatF30', 
+             '6559q7mLHYyO5j1alm6PBq', 
+             '3afedcCeDgsgKRkbyATa8Z',
+             '6a0SjeI2qMnJKiZev1HJtQ',
+             '3yoLUdY3xvWKH3COiSIIig',
+             '6YUy0E5YgwXGtMs6FicWu4']
+
+# AQUÍ VA FA DIES
+# 6J2LdBN97cDWn0MLxYh9HB
 focus_song_id = "6afspjTp6s1QucDHVKPDss"
 
 for i in playlists:
     playlist_id = f'spotify:playlist:{i}'
     tracks = sp.playlist(playlist_id)
     print(f"Adding focus song to playlist: {tracks['name']}")
+    
     playlist_len = len(tracks["tracks"]["items"])
-    print(f"The lenght of the playlist is: {playlist_len}")
-    mixed_list = generate_mixed_list_with_sum_limit(playlist_len)
-    #mixed_list = 18*[3]
+    #print(f"The lenght of the playlist is: {playlist_len}")
+    mixed_list = 19*[3]
     insert_focus_song(mixed_list, focus_song_id, playlist_len)
     print("Done!\n")
 

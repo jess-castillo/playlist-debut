@@ -1,2 +1,7 @@
 requests
 spotipy
+pandas
+matplotlib
+seaborn
+ipykernel
+pygame
