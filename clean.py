@@ -1,20 +1,19 @@
-import pprint
-import sys
+import settings
 
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 
 
-scope = 'playlist-modify-public'
-
-sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id="de31f3d0bec44126ab8346000d130097",
-                                                           client_secret="af22e7ee7a6f400e845506fd033cee0f",
-                                                           redirect_uri="http://localhost:3000",
+sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=settings.CLIENT_ID,
+                                                           client_secret=settings.CLIENT_SECRET,
+                                                           redirect_uri=settings.REDIRECT_URI,
                                                            scope="playlist-modify-public playlist-modify-private"))
-playlists = ['1LaFd5xbkkbRXrm7inRTq4', '5kJGvbJ2ZmlHOVyBmyBl7f', '0tVwAPDbh9VVOh2VN3VSob', '0LgoFGaJAfVDjEaTcGFm0e']
-track_id = ["6afspjTp6s1QucDHVKPDss", "6J2LdBN97cDWn0MLxYh9HB"]
-# tracks = sp.playlist(playlist_id)
+playlists = settings.PLAYLISTS_TO_CLEAN
+track_id = [settings.FOCUS_SONG_ID]
+
+
 for i in playlists:
     playlist_id = f'spotify:playlist:{i}'
-    results = sp.playlist_remove_all_occurrences_of_items(playlist_id, track_id)
-    pprint.pprint(results)
+    tracks = sp.playlist(playlist_id)
+    print(f"Deleting focus song to playlist: {tracks['name']}")
+    sp.playlist_remove_all_occurrences_of_items(playlist_id, track_id)

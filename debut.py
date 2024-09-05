@@ -1,19 +1,21 @@
 import json
 import pdb
 import random
-
+import time
 import spotipy
+import settings
 from spotipy.oauth2 import SpotifyOAuth
 
 # Fuente: https://github.com/spotipy-dev/spotipy/tree/master
 
-sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id="de31f3d0bec44126ab8346000d130097",
-                                                           client_secret="af22e7ee7a6f400e845506fd033cee0f",
-                                                           redirect_uri="http://localhost:3000",
+sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=settings.CLIENT_ID,
+                                                           client_secret=settings.CLIENT_SECRET,
+                                                           redirect_uri=settings.REDIRECT_URI,
                                                            scope="playlist-modify-public playlist-modify-private"))
 
 def generate_mixed_list_with_sum_limit(sum_limit):
     while True:
+        
         # Calculate how many 3's will be in the list
         num_threes = 11  # 50% of 19 rounded down (which is 9)
         
@@ -30,10 +32,12 @@ def generate_mixed_list_with_sum_limit(sum_limit):
         # Check if the sum of the elements meets the sum limit
         if sum(result_list) <= sum_limit:
             return result_list
-
+        if sum_limit < 50:
+            return result_list
 
 def insert_focus_song(mixed_list, focus_song_id, playlist_len):
     # Start by inserting the item at the first position
+    
     sp.playlist_add_items(playlist_id, [f"spotify:track:{focus_song_id}"], position=0)
     playlist_len += 1
     current_position = 1  # We start with an offset of 1 because we added an item at the start
@@ -50,20 +54,19 @@ def insert_focus_song(mixed_list, focus_song_id, playlist_len):
             playlist_len += 1
             break
 
-# https://open.spotify.com/playlist/1LaFd5xbkkbRXrm7inRTq4?si=4189df3ea13f4a6e&pt=deaaa9830404dde380e432b8d693479e
-# playlists = ['5U934d48njPvMoejeF4Lm0', '1LaFd5xbkkbRXrm7inRTq4']
-playlists = ['1LaFd5xbkkbRXrm7inRTq4']
-# 6afspjTp6s1QucDHVKPDss
-focus_song_id = "6afspjTp6s1QucDHVKPDss"
+
+playlists = settings.PLAYLISTS_DEBUT
+focus_song_id = settings.FOCUS_SONG_ID
 
 for i in playlists:
+    start = time.time()
     playlist_id = f'spotify:playlist:{i}'
     tracks = sp.playlist(playlist_id)
     print(f"Adding focus song to playlist: {tracks['name']}")
     playlist_len = len(tracks["tracks"]["items"])
     print(f"The lenght of the playlist is: {playlist_len}")
     mixed_list = generate_mixed_list_with_sum_limit(playlist_len)
-    #mixed_list = 18*[3]
     insert_focus_song(mixed_list, focus_song_id, playlist_len)
-    print("Done!\n")
+    delta = time.time() - start
+    print(f"Done in {delta:.2f} seconds!\n")
 
