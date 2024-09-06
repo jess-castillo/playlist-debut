@@ -1,5 +1,12 @@
-/.cache
+.cache
 __pycache__/
 
 settings.py
 playlists.py
+
+tokens.txt
+
+build/
+*.spec
+
+*.ipynbs

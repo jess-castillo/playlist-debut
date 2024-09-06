@@ -1,13 +1,33 @@
 import  time
-import settings
+import sys
+import os
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 
 # Fuente: https://github.com/spotipy-dev/spotipy/tree/master
+# Find the directory where the executable is running
+if getattr(sys, 'frozen', False):
+    # Running in a bundle (PyInstaller executable)
+    app_dir = os.path.dirname(sys.executable)
+else:
+    # Running in a normal Python environment
+    app_dir = os.path.dirname(os.path.abspath(__file__))
 
-sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=settings.CLIENT_ID,
-                                                           client_secret=settings.CLIENT_SECRET,
-                                                           redirect_uri=settings.REDIRECT_URI,
+# Define the path to config.py (external)
+config_path = os.path.join(app_dir, "settings.py")
+
+# Check if the external config file exists
+if not os.path.exists(config_path):
+    raise FileNotFoundError("settings.py not found. Please place it in the same directory as the executable.")
+
+# Load the config file dynamically using exec()
+with open(config_path) as f:
+    code = f.read()
+    exec(code)
+
+sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID,
+                                                           client_secret=CLIENT_SECRET,
+                                                           redirect_uri=REDIRECT_URI,
                                                            scope="playlist-modify-public playlist-modify-private"))
 
 def insert_focus_song(mixed_list, focus_song_id, playlist_len):
@@ -29,9 +49,9 @@ def insert_focus_song(mixed_list, focus_song_id, playlist_len):
             break
 
 
-playlists = settings.HENAR_CHARTS_DEBUT
+playlists = HENAR_CHARTS_DEBUT
 
-focus_song_id = settings.FOCUS_SONG_ID
+focus_song_id = FOCUS_SONG_ID
 
 for i in playlists:
     start = time.time()

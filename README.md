@@ -1,5 +1,5 @@
 # playlist-debut
-This is repo contains scripts for adding a focus song to a clean streams playlist.
+This is repo contains scripts and executables for adding a focus song to a clean streams playlist.
 
 `settings.py` structure for the code to work:
 ```
@@ -11,11 +11,15 @@ REDIRECT_URI = "http://localhost:3000"
 FOCUS_SONG_ID = ""
 
 # Playlists:
-PLAYLISTS_PREDEBUT = ['']
+PLAYLISTS_PREDEBUT = ['7fAKwGJeTIv9priDNwmLAw']
 
-PLAYLISTS_DEBUT = ['']
+PLAYLISTS_DEBUT = ['7fAKwGJeTIv9priDNwmLAw']
 
-HENAR_CHARTS_DEBUT = ['']
+HENAR_CHARTS_DEBUT = ['7fAKwGJeTIv9priDNwmLAw']
 
-PLAYLISTS_TO_CLEAN = ['']
+PLAYLISTS_TO_CLEAN = ['7fAKwGJeTIv9priDNwmLAw']
 ```
+
+
+
+*Jess C.*
