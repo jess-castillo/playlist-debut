@@ -1,7 +1,7 @@
 import settings
 import os
 import sys
-
+import random
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 
@@ -30,13 +30,25 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID,
                                                            redirect_uri=REDIRECT_URI,
                                                            scope="playlist-modify-public playlist-modify-private",
                                                            cache_path="./tokens.txt"))
-playlists = PLAYLISTS_TO_CLEAN
-track_id = MULTIFOCUS_SONG
 
+
+def empty(playlist_id):
+    # Get the tracks from the playlist
+    tracks = sp.playlist(playlist_id)
+    print(f"Emptying playlist: {tracks['name']}")
+    tracks = tracks["tracks"]["items"]
+    tracks_ids = []
+    for i in range(len(tracks)):
+        track_id = tracks[i]['track']['id']
+        tracks_ids.append(track_id)
+
+    sp.playlist_remove_all_occurrences_of_items(playlist_id, tracks_ids)
+
+
+playlists = PLAYLISTS_TO_EMPTY
 
 for i in playlists:
     playlist_id = f'spotify:playlist:{i}'
-    tracks = sp.playlist(playlist_id)
-    print(f"Deleting focus song to playlist: {tracks['name']}")
-
-    sp.playlist_remove_all_occurrences_of_items(playlist_id, track_id)
+    empty(playlist_id)
+    print("Done!")
+    

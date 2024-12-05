@@ -56,29 +56,29 @@ def generate_mixed_list_with_sum_limit(sum_limit):
         if sum_limit < 50:
             return result_list
 
-def insert_focus_song(mixed_list, focus_song_id, playlist_len):
+def insert_focus_song(mixed_list, focus_song_ids, playlist_len):
     # Start by inserting the item at the first position
+    sp.playlist_add_items(playlist_id, sorted(focus_song_ids, key=lambda *args: random.random()), position=0)
     
-    sp.playlist_add_items(playlist_id, [f"spotify:track:{focus_song_id}"], position=0)
-    playlist_len += 1
-    current_position = 1  # We start with an offset of 1 because we added an item at the start
+    playlist_len += len(focus_song_ids)
+    current_position = 1+len(focus_song_ids)  # We start with an offset of 1 because we added an item at the start
 
     # Insert items based on the mixed_list
     for value in mixed_list:
         current_position += value  # Move forward by the value in the mixed_list
         if current_position <= playlist_len:
-            sp.playlist_add_items(playlist_id, [f"spotify:track:{focus_song_id}"], position=current_position)
-            current_position += 1  # Move past the newly inserted item
-            playlist_len += 1
-        else:
-            sp.playlist_add_items(playlist_id, [f"spotify:track:{focus_song_id}"])
-            playlist_len += 1
+            sp.playlist_add_items(playlist_id, sorted(focus_song_ids, key=lambda *args: random.random()), position=current_position)
+            current_position += len(focus_song_ids)  # Move past the newly inserted item
+            playlist_len += len(focus_song_ids)
+        else:  
+            sp.playlist_add_items(playlist_id, sorted(focus_song_ids, key=lambda *args: random.random()))
+            playlist_len += len(focus_song_ids)
             break
 
 
-playlists = PLAYLISTS_DEBUT
-focus_song_id = FOCUS_SONG_ID
-
+playlists = PLAYLISTS_DEBUT_MULTIFOCUS
+focus_song_ids = MULTIFOCUS_SONG
+multifocus_ids = [f"spotify:track:{i}" for i in MULTIFOCUS_SONG]
 for i in playlists:
     start = time.time()
     playlist_id = f'spotify:playlist:{i}'
@@ -87,7 +87,7 @@ for i in playlists:
     playlist_len = len(tracks["tracks"]["items"])
     print(f"The lenght of the playlist is: {playlist_len}")
     mixed_list = generate_mixed_list_with_sum_limit(playlist_len)
-    insert_focus_song(mixed_list, focus_song_id, playlist_len)
+    insert_focus_song(mixed_list, multifocus_ids, playlist_len)
     delta = time.time() - start
     print(f"Done in {delta:.2f} seconds!\n")
 

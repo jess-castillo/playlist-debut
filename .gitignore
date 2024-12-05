@@ -9,4 +9,6 @@ tokens.txt
 build/
 *.spec
 
-*.ipynbs
+*.ipynb
+
+Program/

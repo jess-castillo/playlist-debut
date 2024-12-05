@@ -1,7 +1,7 @@
 import settings
 import os
 import sys
-
+import random
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 
@@ -30,13 +30,31 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID,
                                                            redirect_uri=REDIRECT_URI,
                                                            scope="playlist-modify-public playlist-modify-private",
                                                            cache_path="./tokens.txt"))
-playlists = PLAYLISTS_TO_CLEAN
-track_id = MULTIFOCUS_SONG
 
+
+def randomizer(playlist_id):
+    # Get the tracks from the playlist
+    tracks = sp.playlist(playlist_id)
+    print(f"Randomizing playlist: {tracks['name']}")
+    tracks = tracks["tracks"]["items"]
+    tracks_ids = []
+    for i in range(len(tracks)):
+        track_id = tracks[i]['track']['id']
+        tracks_ids.append(track_id)
+
+    sp.playlist_remove_all_occurrences_of_items(playlist_id, tracks_ids)
+
+    
+    random.shuffle(tracks_ids)
+    # Re-adding songs:
+    for i in range(len(tracks_ids)):
+        sp.playlist_add_items(playlist_id, [f"spotify:track:{tracks_ids[i]}"], position=i)
+
+
+playlists = PLAYLISTS_TO_RANDOMIZE
 
 for i in playlists:
     playlist_id = f'spotify:playlist:{i}'
-    tracks = sp.playlist(playlist_id)
-    print(f"Deleting focus song to playlist: {tracks['name']}")
-
-    sp.playlist_remove_all_occurrences_of_items(playlist_id, track_id)
+    randomizer(playlist_id)
+    print("Done!")
+    

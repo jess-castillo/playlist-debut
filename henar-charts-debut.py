@@ -35,7 +35,7 @@ def insert_focus_song(mixed_list, focus_song_id, playlist_len):
     sp.playlist_add_items(playlist_id, [f"spotify:track:{focus_song_id}"], position=1)
     playlist_len += 1
     current_position = 2  # We start with an offset of 1 because we added an item at the start
-
+    
     # Insert items based on the mixed_list
     for value in mixed_list:
         current_position += value  # Move forward by the value in the mixed_list
